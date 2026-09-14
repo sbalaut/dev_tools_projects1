@@ -491,6 +491,7 @@ claim a gap is fixed; make the correction visible in the relevant slide.""",
             "score": score,
             "verdict": verdict,
             "revisions": revisions,
+            "score_history": score_history,
             "elapsed_seconds": elapsed,
             "trace": trace,
             "memory": memory.snapshot(),
@@ -741,6 +742,8 @@ if result:
             st.markdown(result["review"])
 
     with trace_tab:
+        st.subheader("Critic score progression")
+        st.line_chart(result["score_history"], x="review_round", y="score")
         st.subheader("Agent interaction trace")
         st.dataframe(result["trace"], use_container_width=True, hide_index=True)
         st.subheader("Final critic feedback")
