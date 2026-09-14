@@ -151,13 +151,21 @@ def preview(text: str, length: int = 180) -> str:
 def read_verdict(text: str, quality_bar: float) -> tuple[float, str, bool]:
     """Parse critic output; the numeric score is authoritative."""
 
-    score_match = re.search(r"SCORE:\s*([0-9]+(?:\.[0-9]+)?)", text, re.IGNORECASE)
-    score = float(score_match.group(1)) if score_match else 0.0
-    verdict_match = re.search(r"VERDICT:\s*(ACCEPT|REVISE)", text, re.IGNORECASE)
-    stated = verdict_match.group(1).upper() if verdict_match else "REVISE"
+    overall_matches = re.findall(
+        r"^\s*(?:OVERALL\s+)?SCORE\s*:\s*([0-9]+(?:\.[0-9]+)?)",
+        text,
+        re.IGNORECASE | re.MULTILINE,
+    )
+    score = min(10.0, max(0.0, float(overall_matches[-1]))) if overall_matches else 0.0
+    verdict_matches = re.findall(
+        r"^\s*VERDICT\s*:\s*(ACCEPT|REVISE)",
+        text,
+        re.IGNORECASE | re.MULTILINE,
+    )
+    stated = verdict_matches[-1].upper() if verdict_matches else "REVISE"
     needs_revision = score < quality_bar
     computed = "REVISE" if needs_revision else "ACCEPT"
-    return score, computed if score_match else stated, needs_revision
+    return score, computed if overall_matches else stated, needs_revision
 
 
 def memory_context(hits: list[dict[str, Any]]) -> str:
