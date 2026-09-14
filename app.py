@@ -564,7 +564,7 @@ with st.sidebar:
     model = st.text_input("OpenAI model", value="gpt-4o-mini")
     temperature = st.slider("Temperature", 0.0, 1.0, 0.25, 0.05)
     quality_bar = st.slider("Critic acceptance score", 6.0, 10.0, 8.0, 0.1)
-    max_revisions = st.slider("Maximum revision passes", 1, 3, 2)
+    max_revisions = st.slider("Maximum revision passes", 1, 5, 2)
 
 left, right = st.columns([1.15, 0.85], gap="large")
 with left:
