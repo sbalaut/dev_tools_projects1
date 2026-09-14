@@ -386,6 +386,9 @@ each factual claim. End with the exact ask recommended by the Funding Advisor.""
         review = ""
         score = 0.0
         verdict = "REVISE"
+        previous_review = "No previous review; this is the baseline assessment."
+        previous_score = 0.0
+        score_history: list[dict[str, Any]] = []
 
         while True:
             review = run_agent_task(
