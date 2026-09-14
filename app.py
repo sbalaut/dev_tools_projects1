@@ -459,8 +459,19 @@ Critic feedback:
 Relevant shared memory:
 {memory_context(revision_hits)}
 
-Preserve correct content, address every concrete gap, keep all unverified claims
-clearly labelled, and keep the final ask aligned with the Funding Advisor.""",
+Produce a complete replacement deck, not editing advice. Address every item in
+the critic's REMAINING GAPS. Strengthen weak sections using:
+- explicit market-sizing formulas or ranges rather than unsupported precision
+- a clearly defined beachhead customer and quantified pain hypothesis
+- competitor alternatives and defensible differentiation
+- pricing, unit-economics assumptions, and a validation method
+- GTM channels, owners, timing, and measurable milestones
+- a funding ask tied numerically to use of funds and runway
+- risks, mitigations, and an appendix of assumptions requiring verification
+
+Preserve correct content, never invent traction or external facts, clearly label
+estimates, and keep the final ask aligned with the Funding Advisor. Do not merely
+claim a gap is fixed; make the correction visible in the relevant slide.""",
                 expected_output="A corrected complete pitch-deck outline in markdown.",
                 step_name=f"pitch-revision-{revisions}",
                 interaction="Review Critic → Pitch Coach feedback loop",
