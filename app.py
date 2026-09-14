@@ -397,15 +397,33 @@ each factual claim. End with the exact ask recommended by the Funding Advisor.""
 
 Quality bar: {brief.quality_bar}/10
 Pitch revision number: {revisions}
+Previous overall score: {previous_score}/10
+
+Previous review:
+{previous_review}
 
 Pitch outline:
 {pitch}
 
-Score evidence, specificity, narrative, and investor readiness out of 10.
-List concrete gaps. End with exactly:
-SCORE: <overall number out of 10>
+Use this fixed rubric, awarding up to 2.5 points for each category:
+1. Evidence discipline: calculations, assumptions, sources, and no invented facts
+2. Specificity: customer, pain, differentiation, business model, GTM, milestones
+3. Narrative: logical investor story with one clear message per slide
+4. Investor readiness: credible ask, use of funds, risks, and next-round proof points
+
+For revision 1 or later, compare against the previous review. Explicitly list
+RESOLVED GAPS and REMAINING GAPS. Do not repeat a prior deduction when the gap
+has been genuinely corrected. A clearly labelled estimate or validation plan is
+good evidence discipline for an early-stage company and must not be treated as
+an invented fact. Recalculate the score from the four rubric subtotals.
+
+End with exactly these two standalone lines:
+OVERALL SCORE: <sum of the four subtotals, out of 10>
 VERDICT: <ACCEPT if score is at least {brief.quality_bar}; otherwise REVISE>""",
-                expected_output="Four scores, concrete gaps, SCORE line, and VERDICT line.",
+                expected_output=(
+                    "Four rubric subtotals, resolved and remaining gaps, followed by "
+                    "standalone OVERALL SCORE and VERDICT lines."
+                ),
                 step_name=f"critic-review-{revisions + 1}",
                 interaction="Pitch Coach → Review Critic",
                 memory=memory,
@@ -414,9 +432,14 @@ VERDICT: <ACCEPT if score is at least {brief.quality_bar}; otherwise REVISE>""",
                 on_update=on_update,
             )
             score, verdict, needs_revision = read_verdict(review, brief.quality_bar)
+            score_history.append(
+                {"review_round": revisions + 1, "score": score, "verdict": verdict}
+            )
             if not needs_revision or revisions >= brief.max_revisions:
                 break
 
+            previous_review = review
+            previous_score = score
             revisions += 1
             revision_hits = memory.search(
                 "pitch evidence gaps investor readiness funding alignment",
